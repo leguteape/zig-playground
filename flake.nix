@@ -9,18 +9,20 @@
         lib,
         pkgs,
         ...
-      }:
-        with pkgs; {
-          devShells.default = mkShell {
-            packages = [
-              gcc
+      }: {
+        devShells.default =
+          pkgs.mkShell.override {
+            stdenv = pkgs.clangStdenv;
+          } {
+            packages = with pkgs; [
+              lldb
               zig
             ];
             shellHook = ''
-              export AR="gcc-ar"
-              exec ${lib.getExe nushell}
+              export AR="llvm-ar"
+              exec ${lib.getExe pkgs.nushell}
             '';
           };
-        };
+      };
     };
 }
