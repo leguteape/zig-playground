@@ -43,8 +43,11 @@ pub fn format_and_write(self: Response, conn: std.net.Server.Connection) !void {
         \\{s}
     ;
 
-    const writer = conn.stream.writer();
-    _ = try writer.print(res_template, .{
+    var stream_buffer: [1024]u8 = undefined;
+    var stream_writer = conn.stream.writer(&stream_buffer);
+    const stream = &stream_writer.interface;
+
+    try stream.print(res_template, .{
         self.version,
         self.status_code,
         self.status_message,
@@ -52,4 +55,6 @@ pub fn format_and_write(self: Response, conn: std.net.Server.Connection) !void {
         self.content_type,
         self.body,
     });
+
+    try stream.flush();
 }

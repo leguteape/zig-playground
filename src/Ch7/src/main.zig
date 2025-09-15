@@ -9,7 +9,7 @@ pub fn main() !void {
     var server = try socket.listen(.{});
     const connection = try server.accept();
 
-    var buffer: [1000]u8 = undefined;
+    var buffer: [1024]u8 = undefined;
     for (0..buffer.len) |i| {
         buffer[i] = 0;
     }

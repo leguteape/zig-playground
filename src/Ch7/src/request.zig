@@ -7,8 +7,10 @@ uri: []const u8,
 version: []const u8,
 
 pub fn init(conn: std.net.Server.Connection, buffer: []u8) !Request {
-    const reader = conn.stream.reader();
-    _ = try reader.read(buffer);
+    var stream_buffer: [1024]u8 = undefined;
+    var stream_reader = conn.stream.reader(&stream_buffer);
+    _ = try stream_reader.file_reader.read(buffer);
+
     var req_lines = std.mem.splitScalar(u8, buffer, '\n');
     const first_line = req_lines.next().?;
     var fl_iter = std.mem.splitScalar(u8, first_line, ' ');

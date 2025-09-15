@@ -16,7 +16,8 @@
           } {
             packages = with pkgs; [
               lldb
-              zig
+              zig_0_15
+              zls_0_15
             ];
             shellHook = ''
               export AR="llvm-ar"
